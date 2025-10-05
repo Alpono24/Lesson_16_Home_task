@@ -1,0 +1,21 @@
+# migrations/env.py (фрагмент)
+import os
+from logging.config import fileConfig
+from sqlalchemy import engine_from_config, pool
+from alembic import context
+
+# ... существующий код ...
+config = context.config
+
+# если есть переменная окружения — подставляем
+database_url = os.getenv("DATABASE_URL")
+if database_url:
+    config.set_main_option("sqlalchemy.url", database_url)
+
+# подключаем наши модели и передаём metadata для автогенерации
+import sys
+sys.path.insert(0, ".")   # чтобы импорт работал из корня проекта
+from models import Base
+target_metadata = Base.metadata
+
+# далее оставшийся стандартный код run_migrations_* без изменений
